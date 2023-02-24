@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "Users" ALTER COLUMN "loggedIn" SET DATA TYPE TEXT;
