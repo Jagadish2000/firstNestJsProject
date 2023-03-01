@@ -30,24 +30,24 @@ let UserController = class UserController {
     }
     borrowBook(req) {
         console.log(req);
-        const jwt = req.headers.authorization.replace('Bearer ', '');
+        const jwt = req.authorization.replace('Bearer ', '');
         const json = this.jwtService.decode(jwt, { json: true });
         const userId = json.sub;
-        return this.userService.borrowBook(userId, req.Body.Book);
+        return this.userService.borrowBook(userId, req.bookId);
     }
     returnBook(req) {
         console.log(req);
-        const jwt = req.headers.authorization.replace('Bearer ', '');
+        const jwt = req.authorization.replace('Bearer ', '');
         const json = this.jwtService.decode(jwt, { json: true });
         const userId = json.sub;
-        return this.userService.returnBook(userId, req.Body.Book);
+        return this.userService.returnBook(userId, req.bookId);
     }
     changePassword(req) {
         console.log(req);
         return this.userService.changePassword(req);
     }
     deleteUser(req) {
-        return this.userService.deleteUser(req);
+        return this.userService.deleteUser(req.userId);
     }
 };
 __decorate([

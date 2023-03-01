@@ -5,10 +5,10 @@ import { PrismaService } from 'src/prisma/prisma.service';
 @Injectable()
 export class BookmarkService {
   constructor(private prisma: PrismaService) {}
-  async addBookmark(userId: number, bookmark: Bookmark) {
+  async addBookmark(userId: number, bookId: string, pagenum: string) {
     const book = await this.prisma.book.findUnique({
       where: {
-        id: bookmark.bookId,
+        id: parseInt(bookId),
       },
     });
     if (book.userId != userId) {
@@ -16,9 +16,8 @@ export class BookmarkService {
     }
     return await this.prisma.bookmark.create({
       data: {
-        bookId: bookmark.bookId,
-        pagenum: bookmark.pagenum,
-        description: bookmark.description,
+        bookId: parseInt(bookId),
+        pagenum: pagenum,
       },
     });
   }

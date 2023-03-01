@@ -16,10 +16,10 @@ let BookmarkService = class BookmarkService {
     constructor(prisma) {
         this.prisma = prisma;
     }
-    async addBookmark(userId, bookmark) {
+    async addBookmark(userId, bookId, pagenum) {
         const book = await this.prisma.book.findUnique({
             where: {
-                id: bookmark.bookId,
+                id: parseInt(bookId),
             },
         });
         if (book.userId != userId) {
@@ -27,9 +27,8 @@ let BookmarkService = class BookmarkService {
         }
         return await this.prisma.bookmark.create({
             data: {
-                bookId: bookmark.bookId,
-                pagenum: bookmark.pagenum,
-                description: bookmark.description,
+                bookId: parseInt(bookId),
+                pagenum: pagenum,
             },
         });
     }

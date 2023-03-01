@@ -6,7 +6,7 @@ import { Book } from '@prisma/client';
 export class BookController {
   constructor(private bookService: BookService) {}
   @Post('add')
-  addBook(@Body() req: Book) {
+  addBook(@Body() req: any) {
     console.log(req);
     return this.bookService.addBook(req);
   }

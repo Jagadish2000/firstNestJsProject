@@ -34,18 +34,18 @@ export class UserController {
   @Patch('borrowBook')
   borrowBook(@Body() req: any) {
     console.log(req);
-    const jwt = req.headers.authorization.replace('Bearer ', '');
+    const jwt = req.authorization.replace('Bearer ', '');
     const json = this.jwtService.decode(jwt, { json: true });
     const userId = json.sub;
-    return this.userService.borrowBook(userId, req.Body.Book);
+    return this.userService.borrowBook(userId, req.bookId);
   }
   @Patch('returnBook')
   returnBook(@Body() req: any) {
     console.log(req);
-    const jwt = req.headers.authorization.replace('Bearer ', '');
+    const jwt = req.authorization.replace('Bearer ', '');
     const json = this.jwtService.decode(jwt, { json: true });
     const userId = json.sub;
-    return this.userService.returnBook(userId, req.Body.Book);
+    return this.userService.returnBook(userId, req.bookId);
   }
   @Patch('changePassword')
   changePassword(@Request() req: ChangePassword) {
@@ -53,7 +53,7 @@ export class UserController {
     return this.userService.changePassword(req);
   }
   @Delete('deactivate')
-  deleteUser(@Body() req: User) {
-    return this.userService.deleteUser(req);
+  deleteUser(@Body() req: any) {
+    return this.userService.deleteUser(req.userId);
   }
 }

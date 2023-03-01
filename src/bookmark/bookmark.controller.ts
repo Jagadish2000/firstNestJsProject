@@ -11,9 +11,14 @@ export class BookmarkController {
   ) {}
   @Post('/add')
   addBookmark(@Request() req: any) {
-    const jwt = req.headers.authorization.replace('Bearer ', '');
+    console.log(req);
+    const jwt = req.rawHeaders[1].replace('Bearer ', '');
     const json = this.jwtService.decode(jwt, { json: true });
     const userId = json.sub;
-    return this.bookmarkService.addBookmark(userId, req.Body);
+    return this.bookmarkService.addBookmark(
+      userId,
+      req.body.bookId,
+      req.body.pagenum,
+    );
   }
 }

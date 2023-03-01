@@ -19,7 +19,7 @@ let UserService = class UserService {
         this.strat = strat;
         this.prisma = prisma;
     }
-    async borrowBook(userId, inputBook) {
+    async borrowBook(userId, bookId) {
         const user = await this.prisma.user.findUnique({
             where: {
                 id: userId,
@@ -27,12 +27,12 @@ let UserService = class UserService {
         });
         const book = await this.prisma.book.findUnique({
             where: {
-                id: inputBook.id,
+                id: parseInt(bookId),
             },
         });
         book.userId = userId;
         const due = new Date();
-        due.setMonth(1);
+        due.setMonth(due.getMonth() + 1);
         await this.prisma.book.update({
             where: {
                 id: book.id,
@@ -43,7 +43,7 @@ let UserService = class UserService {
             },
         });
     }
-    async returnBook(userId, inputBook) {
+    async returnBook(userId, bookId) {
         const user = await this.prisma.user.findUnique({
             where: {
                 id: userId,
@@ -51,7 +51,7 @@ let UserService = class UserService {
         });
         const book = await this.prisma.book.findUnique({
             where: {
-                id: inputBook.id,
+                id: parseInt(bookId),
             },
         });
         book.userId = userId;
@@ -72,10 +72,10 @@ let UserService = class UserService {
     sleep(ms) {
         return new Promise((resolve) => setTimeout(resolve, ms));
     }
-    async deleteUser(user) {
-        await this.prisma.user.update({
+    async deleteUser(userId) {
+        const user = await this.prisma.user.update({
             where: {
-                id: user.id,
+                id: userId,
             },
             data: {
                 flaggedForDel: true,

@@ -10,5 +10,5 @@ export declare class UserController {
     borrowBook(req: any): Promise<void>;
     returnBook(req: any): Promise<string>;
     changePassword(req: ChangePassword): Promise<User>;
-    deleteUser(req: User): Promise<User>;
+    deleteUser(req: any): Promise<User>;
 }

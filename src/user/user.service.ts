@@ -13,7 +13,7 @@ import * as argon from 'argon2';
 export class UserService {
   constructor(private strat: JwtService, private prisma: PrismaService) {}
 
-  async borrowBook(userId: number, inputBook: Book) {
+  async borrowBook(userId: number, bookId: string) {
     const user = await this.prisma.user.findUnique({
       where: {
         id: userId,
@@ -21,12 +21,12 @@ export class UserService {
     });
     const book = await this.prisma.book.findUnique({
       where: {
-        id: inputBook.id,
+        id: parseInt(bookId),
       },
     });
     book.userId = userId;
     const due = new Date();
-    due.setMonth(1);
+    due.setMonth(due.getMonth() + 1);
     await this.prisma.book.update({
       where: {
         id: book.id,
@@ -37,7 +37,7 @@ export class UserService {
       },
     });
   }
-  async returnBook(userId: number, inputBook: Book) {
+  async returnBook(userId: number, bookId: string) {
     const user = await this.prisma.user.findUnique({
       where: {
         id: userId,
@@ -45,7 +45,7 @@ export class UserService {
     });
     const book = await this.prisma.book.findUnique({
       where: {
-        id: inputBook.id,
+        id: parseInt(bookId),
       },
     });
     book.userId = userId;
@@ -68,10 +68,10 @@ export class UserService {
   sleep(ms: number) {
     return new Promise((resolve) => setTimeout(resolve, ms));
   }
-  async deleteUser(user: User) {
-    await this.prisma.user.update({
+  async deleteUser(userId: number) {
+    const user = await this.prisma.user.update({
       where: {
-        id: user.id,
+        id: userId,
       },
       data: {
         flaggedForDel: true,
